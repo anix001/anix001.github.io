@@ -29,6 +29,7 @@ export default function Work() {
             <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-24 bg-linear-to-t from-background to-transparent" />
           )}
           <div
+            data-lenis-prevent={portfolio.projects.length > 4 ? "" : undefined}
             className={[
               "flex flex-col",
               portfolio.projects.length > 4

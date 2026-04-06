@@ -77,6 +77,7 @@ export const portfolio: {
     "Postman",
     "MySQL",
     "MongoDB",
+    "Kafka",
   ],
 
   socials: {
