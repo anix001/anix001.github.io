@@ -61,16 +61,22 @@ export const portfolio: {
   ],
 
   skills: [
+    "JavaScript",
     "TypeScript",
     "React",
     "Next.js",
     "Node.js",
+    "Express.js",
     "PostgreSQL",
     "Redis",
     "Docker",
     "AWS",
     "GraphQL",
     "Tailwind CSS",
+    "Git/GitHub",
+    "Postman",
+    "MySQL",
+    "MongoDB",
   ],
 
   socials: {
