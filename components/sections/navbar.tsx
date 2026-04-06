@@ -35,7 +35,7 @@ export default function Navbar() {
           href="/"
           className="text-sm font-medium text-foreground transition-opacity hover:opacity-70"
         >
-          {portfolio.name}
+          {portfolio.name.split(" ")[0]}
         </Link>
 
         <nav className="flex items-center gap-6">
