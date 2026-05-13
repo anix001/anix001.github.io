@@ -21,10 +21,47 @@ To use Webpack instead of Turbopack: `next dev --webpack` / `next build --webpac
 
 - **Framework**: Next.js 16.2.2 (App Router only, no Pages Router)
 - **React**: 19.2.4 (includes View Transitions, `useEffectEvent`, Activity)
-- **Styling**: Tailwind CSS v4 via `@tailwindcss/postcss` (no `tailwind.config.*` file — config lives in CSS)
+- **Styling**: Tailwind CSS v4 via `@tailwindcss/postcss` (no `tailwind.config.*` file — config lives in `app/globals.css`)
 - **Bundler**: Turbopack (default in v16, stable)
 - **Import alias**: `@/*` → project root (e.g. `@/components/Button`)
 - **Entry points**: `app/layout.tsx` (root layout), `app/page.tsx` (home route)
+- **Output**: Static HTML export (`output: "export"` in `next.config.ts`) — no API routes, no server runtime. Images are unoptimized (`images: { unoptimized: true }`).
+
+### Site Structure
+
+Single-page landing site — all navigation is anchor links (`#work`, `#about`, `#experience`, `#contact`). No nested routes exist beyond the home page.
+
+### Component Organization
+
+```
+components/
+  sections/   # Full-page sections (Navbar, Hero, Work, About, Experience, Contact)
+  ui/         # Primitives: Button, Badge, Separator, Tooltip, Typography
+  providers/  # SmoothScrollProvider (Lenis wrapper)
+```
+
+UI components are built on **Base UI** (`@base-ui/react`) unstyled primitives styled with Tailwind, using **CVA** (`class-variance-authority`) for variants. The `cn()` utility (`lib/utils.ts`) merges classnames via `clsx` + `tailwind-merge`.
+
+### Data Layer
+
+All portfolio content lives in `data/portfolio.ts` as a single exported object — edit this file to update name, role, bio, projects, skills, socials, and experience entries. No CMS or database.
+
+### Animation System
+
+Reusable Framer Motion variants are defined in `lib/animations.ts` (`fadeInUp`, `fadeIn`, `staggerContainer`). Every animated section checks `useReducedMotion()` and passes empty variants when the user prefers reduced motion. Always follow this pattern when adding animations.
+
+### Key Dependencies
+
+- **framer-motion 12** — page/section animations
+- **Lenis 1.3** — smooth scroll (global provider in root layout)
+- **lucide-react** — icons
+- **date-fns** — available but experience duration math uses a custom `getDuration()` in `components/sections/experience.tsx`
+
+### Styling Notes
+
+- Always-dark theme; no light mode or theme toggle exists.
+- Theme tokens use OKLCh color space (`oklch(...)`) defined as CSS variables in `app/globals.css`.
+- shadcn component style is `base-nova` (see `components.json`).
 
 ## Next.js 16 Breaking Changes
 
