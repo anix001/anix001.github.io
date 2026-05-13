@@ -1,10 +1,10 @@
 "use client";
 
-import { useReducedMotion, motion } from "framer-motion";
+import { useReducedMotion, motion, type Variants } from "framer-motion";
 import { Briefcase, Clock, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { H2 } from "@/components/ui/typography";
-import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { fadeInUp, dotAppear } from "@/lib/animations";
 import { experience } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 
@@ -30,11 +30,24 @@ function getDuration(start: string, end: string): string {
   return `${yrs} yr ${mos} mo`;
 }
 
+const lineVariants = {
+  hidden: { scaleY: 0 },
+  visible: {
+    scaleY: 1,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const, delay: 0.1 },
+  },
+};
+
 export default function Experience() {
   const reduced = useReducedMotion();
 
-  const container = reduced ? {} : staggerContainer;
-  const item = reduced ? {} : fadeInUp;
+  const entryVariant = reduced ? {} : fadeInUp;
+  const dotVariant = reduced ? {} : dotAppear;
+  const lineVar = reduced ? {} : lineVariants;
+
+  const container: Variants = reduced
+    ? {}
+    : { hidden: {}, visible: { transition: { staggerChildren: 0.15 } } };
 
   return (
     <section id="experience" className="py-24">
@@ -56,21 +69,26 @@ export default function Experience() {
           {experience.map((entry, i) => (
             <motion.div
               key={entry.title + entry.company}
-              variants={item}
+              variants={entryVariant}
               className="flex gap-5"
             >
-              {/* Left column: dot + connecting line */}
-              <div className="flex flex-col items-center pt-[6px]">
-                <div
+              {/* Left column: animated dot + drawing connector line */}
+              <div className="flex flex-col items-center pt-1.5">
+                <motion.div
+                  variants={dotVariant}
                   className={cn(
-                    "h-2 w-2 shrink-0 rounded-full",
+                    "h-2 w-2 shrink-0",
                     entry.end === "Present"
                       ? "animate-pulse bg-accent"
                       : "bg-border",
                   )}
                 />
                 {i < experience.length - 1 && (
-                  <div className="mt-2 min-h-12 w-px flex-1 bg-border" />
+                  <motion.div
+                    variants={lineVar}
+                    className="mt-2 min-h-12 w-px flex-1 bg-border"
+                    style={{ transformOrigin: "top" }}
+                  />
                 )}
               </div>
 

@@ -1,15 +1,20 @@
 "use client";
 
-import { useReducedMotion, motion } from "framer-motion";
+import { useReducedMotion, motion, type Variants } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { H2 } from "@/components/ui/typography";
-import { fadeIn } from "@/lib/animations";
+import { fadeInUp, badgePop } from "@/lib/animations";
 import { portfolio } from "@/data/portfolio";
 
 export default function About() {
   const reduced = useReducedMotion();
-  const item = reduced ? {} : fadeIn;
+
+  const bioVariant = reduced ? {} : fadeInUp;
+  const badgeVariant = reduced ? {} : badgePop;
+  const badgeStagger: Variants = reduced
+    ? {}
+    : { hidden: {}, visible: { transition: { staggerChildren: 0.04 } } };
 
   return (
     <section id="about" className="py-24">
@@ -19,14 +24,15 @@ export default function About() {
           <Separator className="mt-6" />
         </div>
 
-        <motion.div
-          variants={item}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="grid gap-12 md:grid-cols-2"
-        >
-          <div className="flex flex-col gap-4">
+        <div className="grid gap-12 md:grid-cols-2">
+          {/* Left column — bio text */}
+          <motion.div
+            variants={bioVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            className="flex flex-col gap-4"
+          >
             <p className="text-base leading-7 text-muted-foreground">
               I&apos;m a full stack developer with a focus on building products
               that are fast, accessible, and well-crafted. I care deeply about
@@ -37,19 +43,33 @@ export default function About() {
               REST/GraphQL APIs to building polished React interfaces. I enjoy
               the full arc of a product, from whiteboard to production.
             </p>
-          </div>
+          </motion.div>
 
-          <div>
+          {/* Right column — staggered skill badges */}
+          <motion.div
+            variants={badgeStagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+          >
             <p className="mb-4 text-sm text-muted-foreground">Technologies</p>
             <div className="flex flex-wrap gap-2">
               {portfolio.skills.map((skill) => (
-                <Badge key={skill} variant="outline" className="text-xs">
-                  {skill}
-                </Badge>
+                <motion.div
+                  key={skill}
+                  variants={badgeVariant}
+                  whileHover={reduced ? {} : { scale: 1.08 }}
+                  whileTap={reduced ? {} : { scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                >
+                  <Badge variant="outline" className="cursor-default text-xs">
+                    {skill}
+                  </Badge>
+                </motion.div>
               ))}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
