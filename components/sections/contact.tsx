@@ -1,6 +1,7 @@
 "use client";
 
-import { useReducedMotion, motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, useReducedMotion, motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
@@ -9,7 +10,10 @@ import {
 } from "@/components/ui/tooltip";
 import { H2 } from "@/components/ui/typography";
 import { fadeInUp } from "@/lib/animations";
+import { cn } from "@/lib/utils";
 import { portfolio } from "@/data/portfolio";
+
+const spring = [0.16, 1, 0.3, 1] as const;
 
 function IconGithub() {
   return (
@@ -27,7 +31,6 @@ function IconLinkedin() {
   );
 }
 
-
 const socials = [
   { label: "GitHub", href: portfolio.socials.github, icon: IconGithub },
   { label: "LinkedIn", href: portfolio.socials.linkedin, icon: IconLinkedin },
@@ -36,6 +39,13 @@ const socials = [
 export default function Contact() {
   const reduced = useReducedMotion();
   const item = reduced ? {} : fadeInUp;
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(portfolio.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <section id="contact" className="py-24 pb-32">
@@ -52,12 +62,30 @@ export default function Contact() {
           viewport={{ once: true, margin: "-60px" }}
           className="flex flex-col gap-8"
         >
-          <a
-            href={`mailto:${portfolio.email}`}
-            className="text-3xl font-semibold text-foreground transition-opacity hover:opacity-60 md:text-4xl"
+          {/* Copy email button with slide animation */}
+          <button
+            onClick={handleCopy}
+            className="group overflow-hidden text-left"
+            aria-label="Copy email address"
           >
-            {portfolio.email}
-          </a>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={copied ? "copied" : "email"}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.25, ease: spring }}
+                className={cn(
+                  "block font-semibold transition-opacity group-hover:opacity-60",
+                  copied
+                    ? "text-xl text-emerald-400 md:text-2xl"
+                    : "text-3xl text-foreground md:text-4xl",
+                )}
+              >
+                {copied ? "Copied to Clipboard!" : portfolio.email}
+              </motion.span>
+            </AnimatePresence>
+          </button>
 
           <div className="flex items-center gap-5">
             {socials.map(({ label, href, icon: Icon }) => (

@@ -41,22 +41,6 @@ export const portfolio: {
         "Integrate AWS SES with a Node.js backend.",
       tags: ["Node.js", "AWS", "Email", "Nodemailer"],
       url: "https://github.com/anix001/node-ses-integration",
-    },
-    {
-      title: "Tech Feed",
-      description:
-        "Aggregated tech news from Hacker News, Dev.to, Reddit, TLDR and GitHub Trending — no API keys, fully free.",
-      tags: ["Next.js", "RSS", "Web Scraping", "ISR"],
-      url: "/tech-news",
-      internal: true,
-    },
-     {
-      title: "Birthday Reminder",
-      description:
-        "Never forget family birthdays — visual countdown avatars with zodiac signs and age tracking.",
-      tags: ["Next.js", "TypeScript", "date-fns"],
-      url: "/birthdays",
-      internal: true,
     }
   ],
 

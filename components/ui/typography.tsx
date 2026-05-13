@@ -10,7 +10,7 @@ export function H1({
   return (
     <h1
       className={cn(
-        "text-5xl font-bold tracking-tight md:text-7xl",
+        "text-7xl font-black tracking-tighter md:text-9xl",
         className,
       )}
     >
@@ -29,7 +29,7 @@ export function H2({
   return (
     <h2
       className={cn(
-        "text-2xl font-semibold tracking-tight md:text-3xl",
+        "font-mono text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground",
         className,
       )}
     >

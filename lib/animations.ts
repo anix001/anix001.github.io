@@ -27,3 +27,23 @@ export const staggerContainer: Variants = {
     },
   },
 };
+
+// Individual badge entrance: scale + fade + slight lift
+export const badgePop: Variants = {
+  hidden: { opacity: 0, scale: 0.85, y: 4 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.3, ease },
+  },
+};
+
+// Timeline dot: square scales in from zero
+export const dotAppear: Variants = {
+  hidden: { scale: 0 },
+  visible: {
+    scale: 1,
+    transition: { duration: 0.25, ease },
+  },
+};

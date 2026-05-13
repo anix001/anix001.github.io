@@ -1,48 +1,93 @@
 "use client";
 
-import { useReducedMotion, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { portfolio } from "@/data/portfolio";
 
-export default function Hero() {
-  const reduced = useReducedMotion();
+const spring = [0.16, 1, 0.3, 1] as const;
+const ease = [0.22, 1, 0.36, 1] as const;
 
-  const container = reduced ? {} : staggerContainer;
-  const item = reduced ? {} : fadeInUp;
+export default function Hero() {
+  const words = portfolio.name.split(" ");
 
   return (
     <section className="flex min-h-screen items-center">
       <div className="mx-auto w-full max-w-4xl px-6 pb-24 pt-32 md:px-12 lg:px-24">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col gap-6"
-        >
+        <div className="flex flex-col gap-6">
+
+          {/* Live Status */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0, duration: 0.5, ease }}
+            className="flex items-center gap-2"
+          >
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 bg-emerald-400" />
+            </span>
+            <span className="font-mono text-xs uppercase tracking-[0.15em] text-emerald-400">
+              Available for Architecture
+            </span>
+          </motion.div>
+
+          {/* Role label */}
           <motion.p
-            variants={item}
-            className="text-sm text-muted-foreground"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.5, ease }}
+            className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground"
           >
             {portfolio.role}
           </motion.p>
 
-          <motion.h1
-            variants={item}
-            className="bg-linear-to-r from-muted-foreground via-foreground to-muted-foreground bg-size-[200%_auto] bg-clip-text text-5xl font-bold tracking-tight text-transparent motion-safe:animate-shimmer md:text-7xl"
-          >
-            {portfolio.name}
-          </motion.h1>
+          {/* Thin Swiss rule */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.2, duration: 0.5, ease }}
+            style={{ transformOrigin: "left" }}
+            className="w-10 border-t border-foreground/30"
+          />
 
+          {/* Shutter word reveal */}
+          <h1 className="flex flex-wrap gap-x-[0.22em] text-7xl font-black tracking-tighter md:text-9xl">
+            {words.map((word, i) => (
+              <span key={word} className="overflow-hidden leading-[1]">
+                <motion.span
+                  className="block"
+                  initial={{ y: "105%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    delay: 0.3 + i * 0.12,
+                    duration: 0.9,
+                    ease: spring,
+                  }}
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
+
+          {/* Bio */}
           <motion.p
-            variants={item}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.5, ease }}
             className="max-w-md text-base leading-7 text-muted-foreground md:text-lg"
           >
             {portfolio.bio}
           </motion.p>
 
-          <motion.div variants={item} className="flex gap-3 pt-2">
+          {/* CTA buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 0.5, ease }}
+            className="flex gap-3 pt-2"
+          >
             <a
               href="#work"
               className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
@@ -56,7 +101,8 @@ export default function Hero() {
               Contact
             </a>
           </motion.div>
-        </motion.div>
+
+        </div>
       </div>
     </section>
   );
